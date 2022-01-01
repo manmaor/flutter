@@ -345,6 +345,7 @@ class DefaultTabController extends StatefulWidget {
     this.initialIndex = 0,
     required this.child,
     this.animationDuration,
+    this.onSwiped,
   }) : assert(initialIndex != null),
        assert(length >= 0),
        assert(length == 0 || (initialIndex >= 0 && initialIndex < length)),
@@ -372,6 +373,11 @@ class DefaultTabController extends StatefulWidget {
   ///
   /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
+
+  /// A function that gets called wen a swipe has been made.
+  ///
+  /// Defaults to null.
+  final void Function()? onSwiped;
 
   /// The closest instance of this class that encloses the given context.
   ///
@@ -403,6 +409,11 @@ class _DefaultTabControllerState extends State<DefaultTabController> with Single
       initialIndex: widget.initialIndex,
       animationDuration: widget.animationDuration,
     );
+    if (widget.onSwiped != null) {
+      _controller.addListener(() {
+        widget.onSwiped?.call();
+      });
+    }
   }
 
   @override
